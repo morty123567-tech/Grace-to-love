@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Special One ❤️</title>
+    <style>
+        :root {
+            --bg-color: #ffe6eb;
+            --card-bg: #ffffff;
+            --text-color: #4a4a4a;
+            --accent-color: #ff4d6d;
+        }
+
+        body.dark-mode {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --accent-color: #ff758f;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Tahoma', sans-serif;
+            transition: all 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 99;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            color: var(--text-color);
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        h1 {
+            color: var(--accent-color);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .timer-box {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+
+        .timer {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+        }
+
+        .time-unit {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+            margin: 10px 5px;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3);
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .secret-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 20px;
+            display: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .reason-box {
+            font-size: 1.1rem;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas"></canvas>
+    <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀️ เปลี่ยนธีม</button>
+
+    <div class="container">
+        <h1>💖 To My Favorite Person 💖</h1>
+        <p>ยินดีต้อนรับสู่พื้นที่ส่วนตัวของเราสองคนนะ</p>
+
+        <!-- ตัวนับเวลาที่คบกัน -->
+        <div class="timer-box">
+            <h3>เรารักกันมาแล้ว... ⏳</h3>
+            <div class="timer">
+                <div><span id="days" class="time-unit">0</span><br>วัน</div>
+                <div><span id="hours" class="time-unit">0</span><br>ชั่วโมง</div>
+                <div><span id="minutes" class="time-unit">0</span><br>นาที</div>
+                <div><span id="seconds" class="time-unit">0</span><br>วินาที</div>
+            </div>
+        </div>
+
+        <!-- ปุ่มป๊อบอัพเหตุผลที่รัก -->
+        <div style="margin-bottom: 20px;">
+            <button class="btn" onclick="showReason()">🎲 กดสุ่มเหตุผลที่รักเธอ</button>
+            <div class="reason-box" id="reasonDisplay">กดปุ่มข้างบนสิ มีอะไรจะบอก...</div>
+        </div>
+
+        <!-- ปุ่มเปิดการ์ดความลับ -->
+        <button class="btn" onclick="revealSecret()" style="background-color: #ff758f;">💌 คลิกเพื่อเปิดการ์ดเซอร์ไพรส์</button>
+
+        <div class="secret-card" id="secretCard">
+            <h2>ข้อความถึงเธอ 📝</h2>
+            <p id="typedText"></p>
+        </div>
+    </div>
+
+    <script>
+        // 1. ใส่วันที่เริ่มคบกันตรงนี้ (ปี-เดือน-วันTเวลา)
+        const startDate = new Date("2023-01-01T00:00:00"); 
+
+        // 2. ใส่รายการเหตุผลที่รัก
+        const reasons = [
+            "ชอบเวลาเธอยิ้มที่สุดในโลกเลย 😊",
+            "ขอบคุณที่คอยซัพพอร์ตกันเสมอนะ 💖",
+            "เธอคือความสดใสในทุกๆ วันของเรา 🌟",
+            "ชอบเวลาเธอดื้อ (แต่น้อยลงหน่อยก็ดีนะ!) 😜",
+            "ไม่ว่าจะเจอเรื่องแย่แค่ไหน ได้คุยกับเธอก็หายเหนื่อยเลย 🥰"
+        ];
+
+        // 3. ข้อความพิมพ์ทีละตัวในการ์ดลับ
+        const loveLetter = "ขอบคุณที่ก้าวเข้ามาในชีวิตเรานะ... อยากให้อยู่เป็นความสดใส เป็นรอยยิ้ม และเป็นความสุขให้กันแบบนี้ไปนานๆ รักเธอที่สุดในโลกเลยนะ ❤️✨";
+
+        // ระบบนับเวลา
+        function updateTimer() {
+            const now = new Date();
+            const diff = now - startDate;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / 1000 / 60) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            document.getElementById("days").innerText = days;
+            document.getElementById("hours").innerText = hours;
+            document.getElementById("minutes").innerText = minutes;
+            document.getElementById("seconds").innerText = seconds;
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // ระบบสุ่มเหตุผล
+        function showReason() {
+            const randomIndex = Math.floor(Math.random() * reasons.length);
+            document.getElementById("reasonDisplay").innerText = `"${reasons[randomIndex]}"`;
+            createHeart();
+        }
+
+        // ระบบเปิดข้อความลับ + พิมพ์ทีละตัว
+        let isTyped = false;
+        function revealSecret() {
+            const card = document.getElementById("secretCard");
+            card.style.display = "block";
+            triggerFireworks();
+            
+            if (!isTyped) {
+                isTyped = true;
+                let index = 0;
+                const speed = 50;
+                function typeWriter() {
+                    if (index < loveLetter.length) {
+                        document.getElementById("typedText").innerHTML += loveLetter.charAt(index);
+                        index++;
+                        setTimeout(typeWriter, speed);
+                    }
+                }
+                typeWriter();
+            }
+        }
+
+        // สลับธีม มืด/สว่าง
+        function toggleTheme() {
+            document.body.classList.toggle("dark-mode");
+        }
+
+        // เอฟเฟกต์หัวใจลอย
+        function createHeart() {
+            const heart = document.createElement("div");
+            heart.innerHTML = "💖";
+            heart.style.position = "fixed";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.bottom = "0";
+            heart.style.fontSize = Math.random() * 20 + 20 + "px";
+            heart.style.animation = "float 3s linear forwards";
+            heart.style.opacity = "1";
+            document.body.appendChild(heart);
+
+            setTimeout(() => { heart.remove(); }, 3000);
+        }
+
+        // เอฟเฟกต์พลุ/ดอกไม้ไฟ (Canvas)
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
+
+        function triggerFireworks() {
+            for (let i = 0; i < 50; i++) {
+                particles.push({
+                    x: canvas.width / 2,
+                    y: canvas.height / 2,
+                    dx: (Math.random() - 0.5) * 10,
+                    dy: (Math.random() - 0.5) * 10,
+                    size: Math.random() * 5 + 2,
+                    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                    alpha: 1
+                });
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, index) => {
+                p.x += p.dx;
+                p.y += p.dy;
+                p.alpha -= 0.01;
+                ctx.globalAlpha = p.alpha;
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                if (p.alpha <= 0) particles.splice(index, 1);
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+  </html>
+  
