@@ -150,41 +150,27 @@
         <button class="btn" onclick="revealSecret()" style="background-color: #ff758f;">💌 คลิกเพื่อเปิดการ์ดเซอร์ไพรส์</button>
 
         <div class="secret-card" id="secretCard">
-            <h2>ข้อความถึงเธอ 📝</h2>
-            <p id="typedText"></p>
+            <h2>สุขสันต์วันเกิดค้าบบ 🎂🎈</h2>
+            <p id="H.B.D 🎂🎈 สุขสันต์วันเกิดนะจ๊ะคนฉวยย ขอให้สุขภาพร่างกายแข็งแฮ้งงง! ยิ้มเย้อะๆ เวลาเค้าเห็นแฟนร่าเริงเค้าก็สนุกร่าเริงเหมือนกะแฟนน อวยพรฉบับคนอวยพรไม่เป็น5555"></p>
         </div>
     </div>
 
     <script>
         // 1. ใส่วันที่เริ่มคบกันตรงนี้ (ปี-เดือน-วันTเวลา)
-        const startDate = new Date("2023-01-01T00:00:00"); 
+        const startDate = new Date("2026-05-20T00:00:00"); 
 
         // 2. ใส่รายการเหตุผลที่รัก
         const reasons = [
-            "ชอบเวลาเธอยิ้มที่สุดในโลกเลย 😊",
-            "ขอบคุณที่คอยซัพพอร์ตกันเสมอนะ 💖",
-            "เธอคือความสดใสในทุกๆ วันของเรา 🌟",
-            "ชอบเวลาเธอดื้อ (แต่น้อยลงหน่อยก็ดีนะ!) 😜",
-            "ไม่ว่าจะเจอเรื่องแย่แค่ไหน ได้คุยกับเธอก็หายเหนื่อยเลย 🥰"
+            "สุขล้นๆไม่มีทุกข์ 🤭 ",
+            "ร่างกายแข็งแรงสามารถยกรถได้ 💪 ",
+            "ไม่มีคนเกลียดชัง มีแต่คนรัก 🌟",
+            "เฮงๆรวยๆ คนสวยของเค้า :> 😜",
+            "คุณสวยที่สุดในจักรวาลเยยย 🥰"
         ];
 
         // 3. ข้อความพิมพ์ทีละตัวในการ์ดลับ
-        const loveLetter = "ขอบคุณที่ก้าวเข้ามาในชีวิตเค้าน้าแฟนน... อยากให้อยู่เป็นความสดใส เป็นรอยยิ้ม และเป็นความสุขให้กันแบบนี้ไปนานๆแส๊นนานเยยย รักแฟนที่สุดในจักรยานล้านโลกเลยน๊ะจ๊ะ มั้วววว ❤️✨";
+        const loveLetter = "ขอบคุณที่ก้าวเข้ามาในชีวิตเค้าน้าแฟนน อยากให้อยู่เป็นความสดใส เป็นรอยยิ้ม และเป็นความสุขให้กันแบบนี้ไปนานๆแส๊นนานเยยย รักแฟนที่สุดในจักรยานล้านโลกเลยน๊ะจ๊ะ มั้วววว ❤️✨";
 
-        // ระบบนับเวลา
-        function updateTimer() {
-            const now = new Date();
-            const diff = now - startDate;
-
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((diff / 1000 / 60) % 60);
-            const seconds = Math.floor((diff / 1000) % 60);
-
-            document.getElementById("days").innerText = days;
-            document.getElementById("hours").innerText = hours;
-            document.getElementById("minutes").innerText = minutes;
-            document.getElementById("seconds").innerText = seconds;
         }
         setInterval(updateTimer, 1000);
         updateTimer();
@@ -223,19 +209,19 @@
             document.body.classList.toggle("dark-mode");
         }
 
-        // เอฟเฟกต์หัวใจลอย
+        // เอฟเฟกต์เค้กลอย
         function createHeart() {
-            const heart = document.createElement("div");
-            heart.innerHTML = "💖";
-            heart.style.position = "fixed";
-            heart.style.left = Math.random() * 100 + "vw";
-            heart.style.bottom = "0";
-            heart.style.fontSize = Math.random() * 20 + 20 + "px";
-            heart.style.animation = "float 3s linear forwards";
-            heart.style.opacity = "1";
+            const cake = document.createElement("div");
+            cake.innerHTML = "🎂";
+            cake.style.position = "fixed";
+            cake.style.left = Math.random() * 100 + "vw";
+            cake.style.bottom = "0";
+            cake.style.fontSize = Math.random() * 20 + 20 + "px";
+            cake.style.animation = "float 3s linear forwards";
+            cake.style.opacity = "1";
             document.body.appendChild(heart);
 
-            setTimeout(() => { heart.remove(); }, 3000);
+            setTimeout(() => { cake.remove(); }, 3000);
         }
 
         // เอฟเฟกต์พลุ/ดอกไม้ไฟ (Canvas)
